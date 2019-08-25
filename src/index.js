@@ -122,10 +122,10 @@ reloadAction.click();
  * Helpers
  */
 
-function pad(str, max) {
-  str = str.toString();
-  return str.length < max ? pad("0" + str, max) : str;
-}
+// function pad(str, max) {
+//   str = str.toString();
+//   return str.length < max ? pad("0" + str, max) : str;
+// }
 
 function rand(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));

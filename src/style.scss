@@ -22,6 +22,10 @@ body {
   font-family: 'Lato', sans-serif;
   position: relative;
 
+  > .page-load-overlay {
+    display: none !important;
+  }
+
   #runTour {
     position: absolute;
     top: 1em;
@@ -97,7 +101,7 @@ body {
   }
 
   &.light {
-    background-color: #fff;
+    background-color: #fff !important;
     #color {
       background-color: #1c2022;
     }
@@ -223,7 +227,8 @@ body {
         font-weight: bolder;
         color: #ffda22;
         transition: color 400ms ease, background-color 400ms ease;
-        background-color: rgba(0, 0, 0, 0)
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: .3em;
       }
     }
 
@@ -272,7 +277,6 @@ body {
     .balance > span {
       background-color: rgba(255, 218, 34, .5);
       color: rgba(0, 0, 0, 0);
-      border-radius: .3em;
     }
     // Reload 
     .action--refresh svg {
