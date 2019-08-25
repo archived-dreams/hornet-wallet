@@ -199,7 +199,7 @@ function scrollTo(element, to, duration) {
   var start = element.scrollTop,
     change = to - start,
     currentTime = 0,
-    increment = 10;
+    increment = 16;
 
   var animateScroll = function() {
     currentTime += increment;
