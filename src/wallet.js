@@ -149,6 +149,11 @@ class Wallet {
    * @param {*} page
    */
   load_transactions(pagination_identifier) {
+    // Last page
+    if (this.pagination_identifier !== undefined && this.pagination_identifier === false) {
+      return;
+    }
+
     // Loading status
     if (this.loading("transactions")) { return; }
     this.loading("transactions", true);
@@ -160,7 +165,7 @@ class Wallet {
     }).then(response => {
 
       // Next page
-      this.pagination_identifier = response.meta.next_page_payload
+      this.pagination_identifier = response.meta.next_page_payload.pagination_identifier || false;
 
       // Transactions
       for (let transaction of response.transactions) {

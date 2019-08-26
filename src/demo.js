@@ -123,3 +123,10 @@ Math.easeInOutQuad = function(t, b, c, d) {
   t--;
   return (-c / 2) * (t * (t - 2) - 1) + b;
 };
+
+
+
+
+
+
+document.getElementById("size").getElementsByTagName("a")[1].click();

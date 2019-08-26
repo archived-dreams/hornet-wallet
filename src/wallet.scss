@@ -18,7 +18,9 @@
 }
 
 .w-wallet {
-  font-size: 1rem;
+  // font-size: 1rem;
+  font-size: 14px;
+  line-height: normal;
   display: block !important;
   overflow: hidden;
   position: relative;
@@ -27,6 +29,7 @@
   padding-bottom: 0;
   // box-shadow: 0 0 5px 0px rgba(0, 0, 0, .2);
   box-shadow: 0 0 2px 0px #f8009525;
+  text-align: left;
 
   /**
    * Notification
@@ -87,7 +90,10 @@
     // Block
     > div {
       display: block;
-      width: calc(100% - 2.2em);
+      // width: calc(100% - 2.2em);
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
       padding: 1em 1.1em 2.1em 1.1em;
       padding-top: calc(5.1em - 64px);
     }
@@ -137,7 +143,8 @@
       // margin-top: 1.1em;
       // margin-top: calc(40% - 5.8em);
       // margin-top: calc(40% - 128px + 8em);
-      margin-top: calc(3.1em - 32px);
+      // margin-top: calc(3.1em - 32px);
+      margin-top: calc(3.1em - 35px);
       font-size: calc(2em - 16px);
       text-align: center;
       font-weight: lighter;
