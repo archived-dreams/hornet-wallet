@@ -1,7 +1,9 @@
 import "./wallet.scss";
 
-import faker from "faker";
 import copy from 'copy-to-clipboard';
+
+// Demo
+import faker from "faker";
 
 class Wallet {
   /**
@@ -9,7 +11,8 @@ class Wallet {
    * @param {HTMLElement} element
    */
   constructor(element) {
-    this.wallet = element;
+    this.root = element;
+    this.wallet = this.create_wallet();
     this.transactions = this.wallet.getElementsByClassName("transactions")[0].getElementsByTagName("div")[0];
     this.transfers = {};
 
@@ -59,7 +62,6 @@ class Wallet {
     if (this.loading(false)) {
       return;
     }
-
     this.loading(false, true);
     
     // Reload transactions
@@ -70,6 +72,7 @@ class Wallet {
       ) {
         // Clear transactions list
         this.transactions.innerHTML = "";
+        this.transfers = {};
         delete this.pagination_identifier;
   
         // Load transactions if block opened
@@ -350,6 +353,24 @@ class Wallet {
    * @param {object} data
    */
   api(data) {
+
+    // Production
+    // return new Promise((resolve, reject) => {
+    //   $.ajax({
+    //     method: "POST",
+    //     dataType: "json",
+    //     url: "/community/wp-admin/admin-ajax.php?lang=en&bpml_filter=true",
+    //     data,
+    //     success: response => {
+    //       resolve(response);
+    //     },
+    //     error: function (error) {
+    //       reject(error);
+    //     }
+    //   });
+    // });
+
+    // Demo
     return new Promise(resolve => {
       setTimeout(() => {
         switch (data.action) {
@@ -482,7 +503,42 @@ class Wallet {
   _(str) {
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
+
+  /**
+   * Create Wallet dom
+   */
+  create_wallet() {
+    let element = document.createElement("div");
+    element.className = "w-wallet";
+    element.innerHTML = 
+      // Summary
+      `<div class="summary">` +
+        `<div>` + 
+          // Title
+          `<span class="title">Your wallet</span>` +
+          // ID
+          `<div class="info-id">ID: <span></span></div>` + 
+          // Balance
+          `<div class="balance">` + 
+            `<span></span><br>` +
+            `LGBT Tokens` + 
+          `</div>` + 
+          // Actions
+          `<div class="actions">` + 
+            // Refresh
+            `<a href="#" class="action--refresh" title="Refresh"><span></span></a>` + 
+            // Recent Transactions
+            `<a href="#" class="action--transactions">` + 
+              `Recent Transactions` + 
+            `</a>` + 
+          `</div>` + 
+        `</div>` + 
+      `</div>` + 
+      // Transactions
+      `<div class="transactions"><div></div></div>`;
+
+    return this.root.appendChild(element);
+  }
 }
 
-
-document.wallet = new Wallet(document.getElementsByClassName("w-wallet")[0]);
+export default Wallet;

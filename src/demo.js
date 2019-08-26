@@ -1,5 +1,10 @@
 import "./demo.scss";
-import "./wallet.js";
+import Wallet from "./wallet.js";
+
+document.wallet = new Wallet(
+  document.getElementById("WalletWidgetBlock")
+);
+
 
 /**
  * Below is a hell for a perfectionist

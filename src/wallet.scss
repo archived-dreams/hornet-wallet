@@ -144,13 +144,16 @@
 
       > span {
         display: inline-block;
-        min-width: 4em;
+        min-width: 4.5em;
         font-size: 2em;
         font-weight: bolder;
         color: #ffda22;
         transition: color 400ms ease, background-color 400ms ease;
         background-color: rgba(0, 0, 0, 0);
         border-radius: .3em;
+        &:empty:before {
+          content: '0';
+        }
       }
     }
 
