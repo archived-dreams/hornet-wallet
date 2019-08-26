@@ -1,6 +1,10 @@
 import "./demo.scss";
 import "./wallet.js";
 
+/**
+ * Below is a hell for a perfectionist
+ */
+
 let body = document.body;
 let wallet = document.getElementsByClassName("w-wallet")[0];
 let transactions = wallet.getElementsByClassName("transactions")[0].getElementsByTagName("div")[0];
@@ -10,8 +14,6 @@ let transactionsAction = wallet.getElementsByClassName(
 let reloadAction = wallet.getElementsByClassName("action--refresh")[0];
 
 let polling = null;
-
-
 
 /**
  * Resize

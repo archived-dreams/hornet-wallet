@@ -55,6 +55,11 @@ class Wallet {
       e.preventDefault();
     }
 
+    // Loading status
+    if (this.loading(false)) {
+      return;
+    }
+
     this.loading(false, true);
     
     // Reload transactions

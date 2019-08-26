@@ -107,6 +107,7 @@
       font-size: .7em;
       white-space: nowrap;
       max-width: 100%;
+      display: inline-block;
       // overflow: auto;
       overflow: hidden;
       border-radius: .2em;
@@ -116,10 +117,18 @@
         color: rgba(0, 0, 0, 0);
         transition: background-color 300ms ease;
         border-radius: .2em;
+        &:empty:after {
+          content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+          color: rgba(0, 0, 0, 0);
+          display: inline-block;
+        }
       }
       &:hover > span {
         background: rgba(255, 255, 255, 0);
-        color: rgba(255, 255, 255, 1)
+        color: rgba(255, 255, 255, 1);
+        &:empty:after {
+          background: rgba(255, 255, 255, .6);
+        }
       }
     }
 
