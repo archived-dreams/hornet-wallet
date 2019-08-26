@@ -5,16 +5,24 @@
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "build": "npx webpack --config webpack.config.js"
   },
   "dependencies": {
-    "copy-to-clipboard": "3.2.0",
     "faker": "4.1.0"
   },
   "devDependencies": {
-    "node-sass": "^4.7.2",
-    "@babel/core": "7.2.0",
-    "parcel-bundler": "^1.6.1"
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "node-sass": "^4.12.0",
+    "parcel-bundler": "^1.6.1",
+    "sass-loader": "^7.3.1",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
   },
   "keywords": []
 }

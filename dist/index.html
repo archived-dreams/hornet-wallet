@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Hornet wallet</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+	<style>
+		*, :after, :before {
+    	box-sizing: inherit;
+		}
+		body, html {
+			margin: 0;
+			padding: 0;
+			font-family: 'Lato', sans-serif;
+		}
+		#wallet {
+			margin: 3rem auto;
+		}
+	</style>
+
+	<!-- Wallet -->
+  <link href="./wallet.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<!-- Wallet root element -->
+  <div id="wallet" style="width: 350px; font-size: 16px;"></div>
+
+  <!-- jQuery used only for Ajax requests -->
+  <!-- compatible with all versions of jQuery -->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+  <!-- Wallet -->
+  <script>
+    function renderWallet() {
+      window.wallet = new window._Wallet(
+        document.getElementById("wallet")
+      );
+    }
+  </script>
+  <script src="./wallet.min.js" onload="renderWallet()" defer></script>
+</body>
+
+</html>

@@ -1,4 +1,6 @@
 import "./demo.scss";
+
+import "./wallet.scss";
 import Wallet from "./wallet.js";
 
 document.wallet = new Wallet(
@@ -24,7 +26,7 @@ let polling = null;
  * Resize
  */
 let sizes = document.getElementById("size").getElementsByTagName("a");
-let resizeBlock = document.getElementById("resizeBlock");
+let resizeBlock = document.getElementById("WalletWidgetBlock");
 for (let element of sizes) {
   element.addEventListener("click", e => {
     e.preventDefault();
