@@ -83,9 +83,9 @@ class Wallet {
       balance.innerHTML = Number(response.available_balance).toLocaleString();
 
       // Address
+      this.wallet_address = response.token_holder_address;
       let address = this.wallet.getElementsByClassName("info-id")[0].getElementsByTagName("span")[0];
-      address.innerHTML = this._(response.token_holder_address);
-
+      address.innerHTML = this._(this.wallet_address);
 
     }).finally(() => {
       reload_transactions();
