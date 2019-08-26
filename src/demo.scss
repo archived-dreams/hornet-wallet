@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap');
+
+// Demo
+body {
+  font-size: 16px;
+  background-color: #1c2022;
+  transition: background-color 200ms ease;
+  height: calc(100vh - 10em);
+  width: 350px;
+  margin: 0 auto;
+  padding: 5em 0;
+  font-family: 'Lato', sans-serif;
+  position: relative;
+
+  > .page-load-overlay {
+    display: none !important;
+  }
+
+  #runTour {
+    position: absolute;
+    top: 1em;
+    color: #000;
+    text-decoration: none;
+    background: #ffda22;
+    padding: .5em 1em;
+    border-radius: .3em;
+
+    .left {
+      display: none;
+    }
+  }
+
+  // Tour mode
+  &.tour {
+    #runTour {
+      .left {
+        display: inline;
+      }
+      .run {
+        display: none;
+      }
+    }
+
+    .overlay {
+      z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      cursor: wait;
+    }
+  }
+
+  // Size
+  #resizeBlock {
+    margin: 0 auto;
+    transition: width 300ms ease;
+  }
+  #size {
+    position: absolute;
+    top: 1em;
+    right: 0;
+    color: #fff;
+    padding: .5em 0;
+    > span {
+      font-weight: bolder;
+    }
+    > a {
+      color: #ffda22;
+      text-decoration: none;
+      margin-left: .5em;
+    }
+  }
+
+  // Color
+  #color {
+    background-color: #fff;
+    height: 5em;
+    width: 15em;
+    text-decoration: none;
+    display: inline-block;
+    position: fixed;
+    bottom: -5em;
+    left: -5em;
+    transform: rotate(45deg);
+    transition: height 200ms ease, background-color 200ms ease;
+    &:hover {
+      height: 6em;
+    }
+  }
+
+  &.light {
+    background-color: #fff !important;
+    #color {
+      background-color: #1c2022;
+    }
+    #runTour {
+      color: #ffd1ec;
+      text-decoration: none;
+      background: #1c2022;
+    }
+    #size {
+      color: #000;
+      & > a {
+        color: #f80093;
+      }
+    }
+  }
+
+}

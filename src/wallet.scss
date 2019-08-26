@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap');
-
 /**
  * Author
  * --------------
@@ -10,121 +8,11 @@
  * Telegram: https://t.me/rainbow_json
  */ 
 
-// Demo
-body {
-  font-size: 16px;
-  background-color: #1c2022;
-  transition: background-color 200ms ease;
-  height: calc(100vh - 10em);
-  width: 350px;
-  margin: 0 auto;
-  padding: 5em 0;
-  font-family: 'Lato', sans-serif;
-  position: relative;
-
-  > .page-load-overlay {
-    display: none !important;
-  }
-
-  #runTour {
-    position: absolute;
-    top: 1em;
-    color: #000;
-    text-decoration: none;
-    background: #ffda22;
-    padding: .5em 1em;
-    border-radius: .3em;
-
-    .left {
-      display: none;
-    }
-  }
-
-  // Tour mode
-  &.tour {
-    #runTour {
-      .left {
-        display: inline;
-      }
-      .run {
-        display: none;
-      }
-    }
-
-    .overlay {
-      z-index: 100;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      cursor: wait;
-    }
-  }
-
-  // Size
-  #resizeBlock {
-    margin: 0 auto;
-    transition: width 300ms ease;
-  }
-  #size {
-    position: absolute;
-    top: 1em;
-    right: 0;
-    color: #fff;
-    padding: .5em 0;
-    > span {
-      font-weight: bolder;
-    }
-    > a {
-      color: #ffda22;
-      text-decoration: none;
-      margin-left: .5em;
-    }
-  }
-
-  // Color
-  #color {
-    background-color: #fff;
-    height: 5em;
-    width: 15em;
-    text-decoration: none;
-    display: inline-block;
-    position: fixed;
-    bottom: -5em;
-    left: -5em;
-    transform: rotate(45deg);
-    transition: height 200ms ease, background-color 200ms ease;
-    &:hover {
-      height: 6em;
-    }
-  }
-
-  &.light {
-    background-color: #fff !important;
-    #color {
-      background-color: #1c2022;
-    }
-    #runTour {
-      color: #ffd1ec;
-      text-decoration: none;
-      background: #1c2022;
-    }
-    #size {
-      color: #000;
-      & > a {
-        color: #f80093;
-      }
-    }
-  }
-
-}
-
 /**
  * Wallet Widget
  */
 
-@keyframes spin {
+ @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
@@ -139,6 +27,30 @@ body {
   padding-bottom: 0;
   // box-shadow: 0 0 5px 0px rgba(0, 0, 0, .2);
   box-shadow: 0 0 2px 0px #f8009525;
+
+  /**
+   * Notification
+   */
+  .wallet--nofication {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    transition: all 300ms ease;
+    background: rgba(255, 255, 255, .75);
+    border-bottom-right-radius: .25em;
+    border-bottom-left-radius: .25em;
+    color: #000;
+    box-shadow: 
+      0 1px 3px 0 rgba(0, 0, 0, 0.1), 
+      0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    padding: .2em .4em;
+    font-size: .8em;
+    z-index: 2;
+    &.wallet--nofication--show {
+      transform: translate(-50%, 0);
+    }
+  }
 
   /**
    * Summary
@@ -199,6 +111,7 @@ body {
       overflow: hidden;
       border-radius: .2em;
       > span {
+        cursor: pointer;
         background: rgba(255, 255, 255, .6);
         color: rgba(0, 0, 0, 0);
         transition: background-color 300ms ease;
@@ -250,12 +163,15 @@ body {
       
       // Refresh Action
       // Icon: https://www.flaticon.com/free-icon/refresh-page-option_25429#term=refresh&page=1&position=5
-      .action--refresh svg {
+      .action--refresh > span {
+        display: inline-block;
         width: 1.1em;
         height: 1.1em;
-        fill: rgba(255, 255, 255, .8);
+        background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 438.529 438.528'%3E%3Cpath d='m433.109 23.694c-3.614-3.612-7.898-5.424-12.848-5.424-4.948 0-9.226 1.812-12.847 5.424l-37.113 36.835c-20.365-19.226-43.684-34.123-69.948-44.684-26.262-10.562-53.297-15.842-81.087-15.842-52.344 0-98.022 15.843-137.042 47.536-39.021 31.689-64.715 73.035-77.087 124.048v1.997c0 2.474.903 4.617 2.712 6.423 1.809 1.809 3.949 2.712 6.423 2.712h56.814c4.189 0 7.042-2.19 8.566-6.565 7.993-19.032 13.035-30.166 15.131-33.403 13.322-21.698 31.023-38.734 53.103-51.106 22.082-12.371 45.873-18.559 71.376-18.559 38.261 0 71.473 13.039 99.645 39.115l-39.406 39.397c-3.607 3.617-5.421 7.902-5.421 12.851 0 4.948 1.813 9.231 5.421 12.847 3.621 3.617 7.905 5.424 12.854 5.424h127.906c4.949 0 9.233-1.807 12.848-5.424 3.613-3.616 5.42-7.898 5.42-12.847v-127.907c0-4.949-1.796-9.23-5.42-12.848z'/%3E%3Cpath d='m422.253 255.813h-54.816c-4.188 0-7.043 2.187-8.562 6.566-7.99 19.034-13.038 30.163-15.129 33.4-13.326 21.693-31.028 38.735-53.102 51.106-22.083 12.375-45.874 18.556-71.378 18.556-18.461 0-36.259-3.423-53.387-10.273-17.13-6.858-32.454-16.567-45.966-29.13l39.115-39.112c3.615-3.613 5.424-7.901 5.424-12.847 0-4.948-1.809-9.236-5.424-12.847-3.617-3.62-7.898-5.431-12.847-5.431h-127.907c-4.952 0-9.235 1.811-12.851 5.431-3.616 3.612-5.423 7.9-5.423 12.848v127.907c0 4.945 1.807 9.232 5.424 12.847 3.619 3.61 7.902 5.428 12.851 5.428 4.948 0 9.229-1.817 12.847-5.428l36.829-36.833c20.367 19.41 43.542 34.355 69.523 44.823 25.981 10.472 52.866 15.701 80.653 15.701 52.155 0 97.643-15.845 136.471-47.534 38.828-31.688 64.333-73.042 76.52-124.05.191-.38.281-1.047.281-1.995 0-2.478-.907-4.612-2.715-6.427-1.81-1.799-3.953-2.706-6.431-2.706z'/%3E%3C/svg%3E%0A");
+        background-size: 100% 100%;
+        opacity: .8;
         &:hover {
-          color: rgba(255, 255, 255, 1);
+          opacity: 1;
         }
       }
 
@@ -270,21 +186,6 @@ body {
   }
 
   /**
-   * Loading state
-   */
-  &.state--loading > .summary {
-    // Balance
-    .balance > span {
-      background-color: rgba(255, 218, 34, .5);
-      color: rgba(0, 0, 0, 0);
-    }
-    // Reload 
-    .action--refresh svg {
-      animation: spin 2s linear infinite;
-    }
-  }
-
-  /**
    * Transactions
    */
   .transactions {
@@ -295,18 +196,31 @@ body {
     transition: margin-top 500ms ease;
     background-color: #fff;
     height: 18em;
-    overflow: auto;
+    display: flex;
 
-    // Transaction
+    // Scrolling area
     > div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: .7em .4em;
-      border-bottom: 1px solid rgb(243, 243, 243); // #f80093
+      overflow: auto;
+      height: 100%;
+      width: 100%;
+    }
+
+    // Transaction 
+    .transaction--block {
+      border-bottom: 1px solid rgb(243, 243, 243);
       &:last-child {
         border-bottom-width: 0;
       }
+    }
+
+    // Transaction Overview
+    .transaction--block > .transaction--info {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      padding: .7em .4em;
+      cursor: pointer;
 
       // Summary
       .transaction--summary {
@@ -317,6 +231,18 @@ body {
       .transaction--title {
         font-weight: bolder;
         font-size: .9em;
+        margin-right: .2rem;
+      }
+
+      // Name
+      .transaction--user {
+        border-radius: .3rem;
+        display: inline-block;
+        font-size: .7em;
+        background-color: #f80093;
+        background: linear-gradient(to top right,#f80093,#ff6c6c);
+        color: #fff;
+        padding: .1rem .3rem;
       }
 
       // Date
@@ -415,24 +341,57 @@ body {
       }
     }
 
+    // Transaction details
+    .transaction--details {
+      display: block;
+      transition: height 350ms ease;
+      overflow: auto;
+      text-align: left;
+      background: rgb(243, 243, 243);
+      padding: 1em 1.3em;
+      > span {
+        font-weight: 600;
+      }
+      >.small {
+        font-size: .7em;
+        font-weight: normal;
+      }
+      >.primary {
+        color: #f80093;
+      }
+    }
+
     // Empty
     // Icon: https://www.flaticon.com/free-icon/empty_2039107#term=empty&page=1&position=14
-    &:empty {
+    > div:empty {
       text-align: center;
+      background: #fff url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='256' x2='256' y1='0' y2='512'%3E%3Cstop offset='0' stop-color='%23f80093'/%3E%3Cstop offset='1' stop-color='%23ff6c6c'/%3E%3C/linearGradient%3E%3Cpath d='m512 256c0 68.38-26.629 132.667-74.98 181.02-48.353 48.351-112.64 74.98-181.02 74.98-47.869 0-93.723-13.066-133.518-37.482l29.35-29.35c30.91 17.088 66.42 26.832 104.168 26.832 119.103 0 216-96.897 216-216 0-37.748-9.744-73.258-26.833-104.167l29.351-29.35c24.416 39.794 37.482 85.648 37.482 133.517zm-482.858 255.142-28.284-28.284 60.528-60.528c-39.719-46.325-61.386-104.661-61.386-166.33 0-68.38 26.629-132.667 74.98-181.02 48.353-48.351 112.64-74.98 181.02-74.98 61.669 0 120.005 21.667 166.33 61.386l60.528-60.528 28.284 28.284zm60.711-117.28 304.009-304.009c-37.431-31.114-85.497-49.853-137.862-49.853-119.103 0-216 96.897-216 216 0 52.365 18.738 100.431 49.853 137.862z' fill='url(%23a)'/%3E%3C/svg%3E") 50% 4em no-repeat;
+      background-size: 5em 5em;
+
       &::before {
-        display: inline-block;
-        content: "";
-        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='256' x2='256' y1='0' y2='512'%3E%3Cstop offset='0' stop-color='%23f80093'/%3E%3Cstop offset='1' stop-color='%23ff6c6c'/%3E%3C/linearGradient%3E%3Cpath d='m512 256c0 68.38-26.629 132.667-74.98 181.02-48.353 48.351-112.64 74.98-181.02 74.98-47.869 0-93.723-13.066-133.518-37.482l29.35-29.35c30.91 17.088 66.42 26.832 104.168 26.832 119.103 0 216-96.897 216-216 0-37.748-9.744-73.258-26.833-104.167l29.351-29.35c24.416 39.794 37.482 85.648 37.482 133.517zm-482.858 255.142-28.284-28.284 60.528-60.528c-39.719-46.325-61.386-104.661-61.386-166.33 0-68.38 26.629-132.667 74.98-181.02 48.353-48.351 112.64-74.98 181.02-74.98 61.669 0 120.005 21.667 166.33 61.386l60.528-60.528 28.284 28.284zm60.711-117.28 304.009-304.009c-37.431-31.114-85.497-49.853-137.862-49.853-119.103 0-216 96.897-216 216 0 52.365 18.738 100.431 49.853 137.862z' fill='url(%23a)'/%3E%3C/svg%3E") 100% 100% no-repeat;
-        width: 5em;
-        height: 5em;
-        margin-top: 4em;
-      }
-      &::after {
         content: "No transactions";
         display: block;
-        margin-top: 1em;
+        margin-top: 10em;
         color: rgba(0, 0, 0, .8);
       }
+    }
+
+    // Transactions loading
+    &::after {
+      content: "";
+      background: rgba(255, 255, 255, .8) url("data:image/svg+xml,%3Csvg fill='%23ee5253' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1728 1728'%3E%3Cpath d='M1728 864q0 176-68.5 336t-184 275.5-275.5 184-336 68.5-336-68.5-275.5-184-184-275.5T0 864q0-213 97-398.5T362 160 736 9v228q-221 45-366.5 221T224 864q0 130 51 248.5t136.5 204 204 136.5 248.5 51 248.5-51 204-136.5 136.5-204 51-248.5q0-230-145.5-406T992 237V9q206 31 374 151t265 305.5 97 398.5z'/%3E%3C/svg%3E") 75% 75% no-repeat;
+      display: inline-block;
+      border-radius: 50%;
+      position: absolute;
+      bottom: .3em;
+      right: .3rem;
+      // left: 50%; 
+      // transform: translateX(-50%);
+      width: 1.1em;
+      height: 1.1em;
+      animation: spin 2s linear infinite;
+      margin-bottom: -2em;
+      transition: margin-bottom 350ms ease;
     }
   }
   // Opened
@@ -443,4 +402,35 @@ body {
       margin-top: 0;
     }
   }
+
+
+  /**
+   * Loading states
+   */
+
+  // Global
+  &.state--loading > .summary {
+    // Balance
+    .balance > span {
+      background-color: rgba(255, 218, 34, .5);
+      color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  // Reload button
+  &.state--loading,
+  &.state--loading--transactions {
+    .action--refresh > span {
+      animation: spin 2s linear infinite;
+    }
+  }
+
+  // Transactions
+  // Icon: https://fontawesome.com/v4.7.0/icon/circle-o-notch
+  &.state--loading--transactions.state--open-transactions .transactions {
+    &::after {
+      margin-bottom: 0;
+    }
+  }
+
 }
