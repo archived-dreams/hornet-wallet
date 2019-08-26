@@ -393,8 +393,9 @@ class Wallet {
                   lgbtt_user_id: faker.finance.bitcoinAddress(),
                   user_id: faker.random.number(),
                   meta: {
-                    next_page_payload:
-                      "eyJmcm9tIjoyMCwibGltaXQiOjIwLCJtZXRhX3Byb3BlcnR5IjpbXSwic3RhdHVzIjpbXX0=",
+                    next_page_payload: {
+                      pagination_identifier: "eyJmcm9tIjoyMCwibGltaXQiOjIwLCJtZXRhX3Byb3BlcnR5IjpbXSwic3RhdHVzIjpbXX0="
+                    },
                     total_no: faker.random.number()
                   },
                   transactions: (() => {
