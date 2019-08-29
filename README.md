@@ -1,4 +1,4 @@
-# Horet community wallet
+# Hornet community wallet
 
 Example: https://codesandbox.io/s/github/JsonDeveloper/hornet-wallet
 
@@ -6,7 +6,7 @@ Example: https://codesandbox.io/s/github/JsonDeveloper/hornet-wallet
 
 ## Build
 
-[CSS: 29KB, JS: 9KB, Total: 36KB]
+[CSS: 29KB, JS: 9KB, Total: 36KB (11KB gziped)]
 
 ```
 # npm install

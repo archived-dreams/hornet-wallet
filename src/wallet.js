@@ -6,7 +6,9 @@ class Wallet {
   constructor(element) {
     this.root = element;
     this.wallet = this.create_wallet();
-    this.transactions = this.wallet.getElementsByClassName("transactions")[0].getElementsByTagName("div")[0];
+    this.transactions = this.wallet.querySelector(".transactions > div");
+    this.balance = this.wallet.querySelector(".balance > span");
+    this.address = this.wallet.querySelector(".info-id > span");
     this.transfers = {};
 
     // States
@@ -20,25 +22,28 @@ class Wallet {
 
     // Trigger :: Collapse Transactions
     this.wallet
-      .getElementsByClassName("action--transactions")[0]
+      .querySelector(".action--transactions")
       .addEventListener("click", e => this.collapse_transactions(e));
 
     // Trigger :: Reload all data
     this.wallet
-      .getElementsByClassName("action--refresh")[0]
+      .querySelector(".action--refresh")
       .addEventListener("click", e => this.reload(e));
 
     // Trigger :: Show Transaction Details
-    this.transactions.addEventListener('click', e => this.transaction_details(e))
+    this.transactions.addEventListener("click", e =>
+      this.transaction_details(e)
+    );
 
     // Trigger :: Preload Transactions on scroll
-    this.transactions.addEventListener("scroll", () => this.preload_transactions_on_scroll());
+    this.transactions.addEventListener("scroll", () =>
+      this.preload_transactions_on_scroll()
+    );
 
     // Trigger :: Copy wallet
     this.wallet
-      .getElementsByClassName("info-id")[0]
-      .getElementsByTagName("span")[0]
-      .addEventListener("click", e => this.copy_wallet())
+      .querySelector(".info-id > span")
+      .addEventListener("click", e => this.copy_wallet());
   }
 
   /**
@@ -60,38 +65,38 @@ class Wallet {
     // Reload transactions
     let reload_transactions = () => {
       if (
-        !this.loading("transactions") &&
-        !without_transactions
-      ) {
+        ! without_transactions && 
+        ! this.loading("transactions")
+        ) {
+
         // Clear transactions list
         this.transactions.innerHTML = "";
         this.transfers = {};
         delete this.pagination_identifier;
 
         // Load transactions if block opened
-        this.wallet.classList.contains(this.states.transactions_opened) && this.load_transactions()
+        this.wallet.classList.contains(this.states.transactions_opened) &&
+          this.load_transactions();
+
       }
-    }
+    };
 
     // Reload main info
     this.api({
       action: "get_wallet"
     }).then(response => {
 
-      // Balance
-      let balance = this.wallet.getElementsByClassName("balance")[0].getElementsByTagName("span")[0];
-      balance.innerHTML = Number(response.available_balance).toLocaleString();
+        // Balance
+        this.balance.innerHTML = Number(response.available_balance).toLocaleString();
 
-      // Address
-      this.wallet_address = response.token_holder_address;
-      let address = this.wallet.getElementsByClassName("info-id")[0].getElementsByTagName("span")[0];
-      address.innerHTML = this._(this.wallet_address);
+        // Address
+        this.wallet_address = response.token_holder_address;
+        this.address.innerHTML = this._(this.wallet_address);
 
-    }).finally(() => {
-      reload_transactions();
-      this.loading(false, false);
-    });
-
+      }).finally(() => {
+        reload_transactions() 
+        this.loading(false, false);
+      });
   }
 
   /**
@@ -100,28 +105,24 @@ class Wallet {
    */
   collapse_transactions(e) {
     // Prevent click
-    if (e !== undefined) {
-      e.preventDefault();
-    }
+    (e !== undefined) && e.preventDefault();
 
     // Load transactions
     if (
       this.pagination_identifier === undefined &&
-      !this.loading("transactions") &&
-      !this.wallet.classList.contains(this.states.transactions_opened)
-      ) {
+      ! this.loading("transactions") &&
+      ! this.wallet.classList.contains(this.states.transactions_opened)
+    ) {
       this.load_transactions("");
     }
 
     // Open
-    if (!this.wallet.classList.contains(this.states.transactions_opened)) {
+    if (! this.wallet.classList.contains(this.states.transactions_opened)) {
       // Scroll to top
       this.transactions.scrollTop = 0;
       // Reset Transaction Details
-      let transfer = this.transactions.querySelector('.transaction--details');
-      if (transfer) {
-        transfer.remove();
-      }
+      let transfer = this.transactions.querySelector(".transaction--details");
+      transfer && transfer.remove();
     }
 
     // Collapse
@@ -131,14 +132,14 @@ class Wallet {
   /**
    * Preload transactions on scroll
    */
-  preload_transactions_on_scroll(){
+  preload_transactions_on_scroll() {
     if (
-      (
-        this.transactions.scrollHeight
-        - this.transactions.scrollTop
-        - this.transactions.offsetHeight * 2
-      ) < 100 &&
-      !this.loading("transactions")
+      ! this.loading("transactions") && 
+      100 > (
+        this.transactions.scrollHeight -
+        this.transactions.scrollTop -
+        this.transactions.offsetHeight * 2
+      )
     ) {
       this.load_transactions();
     }
@@ -150,12 +151,17 @@ class Wallet {
    */
   load_transactions(pagination_identifier) {
     // Last page
-    if (this.pagination_identifier !== undefined && this.pagination_identifier === false) {
+    if (
+      this.pagination_identifier !== undefined &&
+      this.pagination_identifier === false
+    ) {
       return;
     }
 
-    // Loading status
-    if (this.loading("transactions")) { return; }
+    // Loading state
+    if (this.loading("transactions")) {
+      return;
+    }
     this.loading("transactions", true);
 
     let page = pagination_identifier || this.pagination_identifier;
@@ -164,80 +170,79 @@ class Wallet {
       pagination_identifier: page
     }).then(response => {
 
-      // Next page
-      this.pagination_identifier = response.meta.next_page_payload.pagination_identifier || false;
+        // Next page
+        this.pagination_identifier = response.meta.next_page_payload.pagination_identifier || false;
 
-      // Transactions
-      for (let transaction of response.transactions) {
+        // Transactions
+        for (let transaction of response.transactions) {
 
-        // Icon
-        let icon;
-        if (transaction.meta_property.name === "community reward") {
-          icon = "community_reward";
-        } else if (transaction.meta_property.name === "shop_payment") {
-          icon = "shop_payment";
-        }
+          // Icon
+          let icon;
+          if (transaction.meta_property.name === "community reward") {
+            icon = "community_reward";
+          } else if (transaction.meta_property.name === "shop_payment") {
+            icon = "shop_payment";
+          }
 
-        // Transfer
-        let transfer = transaction.transfers[0];
+          // Transfer
+          let transfer = transaction.transfers[0];
 
-        // Type
-        let type = transfer.from === this.wallet_address ? "debt" : "income";
+          // Type
+          let type = transfer.from === this.wallet_address ? "debt" : "income";
 
-        // Second user name
-        let user = {
-          name: transfer[`${ type === "debt" ? "to" : "from" }_name`],
-          address: transfer[type === "debt" ? "to" : "from"]
-        };
+          // Second user name
+          let user = {
+            name: transfer[`${type === "debt" ? "to" : "from"}_name`],
+            address: transfer[type === "debt" ? "to" : "from"]
+          };
 
-        // Title
-        let title = transaction.meta_property.name;
-        let details = String(transaction.meta_property.details).trim();
-        if (details !== "") {
-          title += ` (${details})`;
-        }
+          // Title
+          let title = this.humanize(transaction.meta_property.name);
+          let details = String(transaction.meta_property.details).replace(/(( |^|_)(\d+))/g, " ").trim();
+          if (details !== "" ) {
+            title += ` (${this.humanize(details, false)})`;
+          }
 
-        // Date
-        let time = new Date(transaction.updated_timestamp * 1000);
+          // Date
+          let time = new Date(transaction.updated_timestamp * 1000);
 
-        // Amount
-        let amount = transfer.amount;
+          // Amount
+          let amount = transfer.amount;
 
-        // Add transaction to dom
-        let element = document.createElement("div");
-        element.className = `transaction--block`;
-        element.setAttribute("data-id", transaction.id);
-        element.innerHTML =
-          // Main Transaction info
-          `<div class="transaction--info transaction--type-${type}">` +
-            // Icon
-            `<div class="transaction--icon">` +
-              `<div class="transaction--icon--${icon || "none"}"></div>` +
-            `</div>` +
-            // Summary
-            `<div class="transaction--summary">` +
-              // Title
-              `<span class="transaction--title">${this._(title)}</span>` +
-              // User
-              `<span class="transaction--user">` +
-                this._(user.name) +
-              `</span>` +
-              // Date
-              `<span class="transaction--time">${time.toLocaleString()}</span>` +
-            `</div>` +
-            // Ammount
-            `<div class="transaction--amount">` +
-                amount +
-              `<span>Tokens</span>` +
-            `</div>` +
-          `</div>`;
+          // Add transaction to dom
+          let element = document.createElement("div");
+          element.className = "transaction--block";
+          element.setAttribute("data-id", transaction.id);
+          element.innerHTML =
+            // Main Transaction info
+            `<div class="transaction--info transaction--type-${type}">` +
+              // Icon
+              `<div class="transaction--icon">` +
+                `<div class="transaction--icon--${icon || "none"}"></div>` +
+              `</div>` +
+              // Summary
+              `<div class="transaction--summary">` +
+                // Title
+                `<span class="transaction--title">${this._(title)}</span>` +
+                // User
+                `<span class="transaction--user">` +
+                  this._(user.name) +
+                `</span>` +
+                // Date
+                `<span class="transaction--time">${time.toLocaleString()}</span>` +
+              `</div>` +
+              // Ammount
+              `<div class="transaction--amount">` +
+                  amount +
+                `<span>Tokens</span>` +
+              `</div>` +
+            `</div>`;
 
           this.transfers[transaction.id] = transaction;
           this.transactions.appendChild(element);
-      }
+        }
 
-      // Add to dom
-    }).finally(() => this.loading("transactions", false));
+      }).finally(() => this.loading("transactions", false));
   }
 
   /**
@@ -260,7 +265,7 @@ class Wallet {
       }
     }
 
-    let transaction = this.transfers[block.getAttribute('data-id') || ''];
+    let transaction = this.transfers[block.getAttribute("data-id") || ""];
 
     // Transactionn not found
     if (!transaction) {
@@ -268,54 +273,42 @@ class Wallet {
     }
 
     // Hide
-    if (block.getElementsByClassName("transaction--details").length > 0) {
-      block.getElementsByClassName("transaction--details")[0].remove();
-    }
+    let old = block.querySelector(".transaction--details");
+    old && block.remove();
 
     // Show
-    else {
+    if (old === null) {
       // Transfer
       let transfer = transaction.transfers[0];
 
       // Type
       let type = transfer.from === this.wallet_address ? "debt" : "income";
 
+      // Direction
+      let direction = type === "debt" ? "to" : "from";
+
       // Content
-        let element = document.createElement("div");
-        element.className = `transaction--details`;
-        element.innerHTML =
-          // Overview
-          `<span>Status:</span> ${transaction.status}<br>` +
-          `<span>Type:</span> ${transaction.meta_property.type}<br><br>` +
-
-          // User
-            (
-              type === "debt" ?
-              // To
-              `<span class="primary">To</span><br>` +
-              `<span>Name:</span> ${this._(transfer.to_name)}<br>` +
-              `<span>Address:</span> <span class="small">${this._(transfer.to)}</span><br>` +
-              `<span>User ID:</span> <span class="small">${this._(transfer.to_user_id)}</span><br><br>`:
-
-              // From
-              `<span class="primary">From</span><br>` +
-              `<span>Name:</span> ${this._(transfer.from_name)}<br>` +
-              `<span>Address:</span> <span class="small">${this._(transfer.from)}</span><br>` +
-              `<span>User ID:</span> <span class="small">${this._(transfer.from_user_id)}</span><br><br>`
-            ) +
-
-          // Technical info
-          `<span class="primary">Technical info</span><br>` +
-          `<span>ID:</span> <span class="small">${transaction.id}</span><br>` +
-          `<span>Hash:</span> <span class="small">${transaction.transaction_hash}</span><br>` +
-          `<span>Block:</span> #${transaction.block_number} <span class="small">(${(new Date(transaction.block_timestamp * 1000)).toLocaleString()})</span>`;
-
+      let element = document.createElement("div");
+      element.className = `transaction--details`;
+      element.innerHTML =
+        // Overview
+        `<span>Status:</span>&nbsp;${transaction.status}<br>` +
+        `<span>Type:</span>&nbsp;${this.humanize(transaction.meta_property.type, false)}<br>` +
+        `<span>Details:</span>&nbsp;${this.humanize(transaction.meta_property.details, false)}<br><br>` +
+        // User
+        `<span class="primary">${type === "debt" ? "To" : "From"}</span><br>` +
+        `<span>Name:</span>&nbsp;${this._(transfer[`${direction}_name`])}<br>` +
+        `<span>Address:</span>&nbsp;<span class="small">${this._(transfer[direction])}</span><br>` +
+        `<span>User ID:</span>&nbsp;<span class="small">${this._(transfer[`${direction}_user_id`])}</span><br><br>` + 
+        // Technical info
+        `<span class="primary">Technical info</span><br>` +
+        `<span>ID:</span>&nbsp;<span class="small">${transaction.id}</span><br>` +
+        `<span>Hash:</span>&nbsp;<span class="small">${transaction.transaction_hash}</span><br>` +
+        `<span>Block:</span>&nbsp;#${transaction.block_number}&nbsp;<span class="small">(${new Date(transaction.block_timestamp * 1000).toLocaleString()})</span>`;
 
       // Close other
-      let old = this.transactions.querySelector('.transaction--details');
-      if (old) {
-        old.remove();
-      }
+      let old = this.transactions.querySelector(".transaction--details");
+      old && old.remove();
 
       // Print
       block.appendChild(element);
@@ -323,7 +316,6 @@ class Wallet {
       // Scroll to block
       // block.scrollIntoView(false);
       this.transactions.scrollTop = block.offsetTop;
-
     }
   }
 
@@ -360,12 +352,8 @@ class Wallet {
           dataType: "json",
           url: "/community/wp-admin/admin-ajax.php?lang=en&bpml_filter=true",
           data,
-          success: response => {
-            resolve(response);
-          },
-          error: function (error) {
-            reject(error);
-          }
+          success: response => resolve(response),
+          error: error => reject(error)
         });
       });
     }
@@ -468,13 +456,16 @@ class Wallet {
    * Copy wallet address
    */
   copy_wallet() {
-    let address = this.wallet.getElementsByClassName("info-id")[0].getElementsByTagName("span")[0].innerText;
-    address = String(address).trim();
+    
+    let address = String(this.address.innerText).trim();
 
     try {
-      navigator.clipboard.writeText(address).then(() => {
-        this.notify("Wallet ID copied!");
-      }, err => console.error(`Copying error: ${err}`));
+      navigator.clipboard.writeText(address).then(
+        () => {
+          this.notify("Wallet ID copied!");
+        },
+        err => console.error(`Copying error: ${err}`)
+      );
     } catch (e) {}
   }
 
@@ -483,26 +474,26 @@ class Wallet {
    * @param {String} message
    */
   notify(message, timer = 1500) {
-      if (this.wallet.getElementsByClassName('wallet--nofication').length > 0) {
-        return;
-      }
+    if (this.wallet.querySelector(".wallet--nofication") !== null) {
+      return;
+    }
 
-      // Create notification
-      let element = document.createElement("div");
-      element.className = `wallet--nofication`;
-      element.innerHTML = message
-      let notification = this.wallet.appendChild(element);
+    // Create notification
+    let element = document.createElement("div");
+    element.className = "wallet--nofication";
+    element.innerHTML = message;
+    let notification = this.wallet.appendChild(element);
 
-      // Lifecycle
+    // Lifecycle
+    setTimeout(() => {
+      notification.classList.add("wallet--nofication--show");
       setTimeout(() => {
-        notification.classList.add('wallet--nofication--show');
+        notification.classList.remove("wallet--nofication--show");
         setTimeout(() => {
-          notification.classList.remove('wallet--nofication--show');
-          setTimeout(() => {
-            notification.remove();
-          }, 300);
-        }, timer);
-      }, 100)
+          notification.remove();
+        }, 300);
+      }, timer);
+    }, 100);
   }
 
   /**
@@ -510,7 +501,30 @@ class Wallet {
    * @param {*} str
    */
   _(str) {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /**
+   * Humanize string (under_score)
+   * @param {*} str 
+   */
+  humanize(str, to_upper = true) {
+    let frags = str.split('_');
+    let build = [];
+    for (let i = 0; i < frags.length; i++) {
+      if (/^\d+$/.test(frags[i] + (frags[i + 1] || " "))) {
+        build.push(frags[i], "_");
+      } else if (to_upper) {
+        build.push(frags[i].charAt(0).toUpperCase() + frags[i].slice(1), " ");
+      } else {
+        build.push(frags[i], " ");
+      }
+    }
+    return String(build.join('')).trim();
   }
 
   /**
